@@ -12,8 +12,12 @@ import {
 } from './validation/index.js';
 
 // Подключение к БД
+const con =
+	process.env.MONGODB_URI ||
+	'mongodb+srv://ruslan:jA2tJZzwALoaMLAW@cluster.yvem4p5.mongodb.net/sneakers';
+
 mongoose
-	.connect(process.env.MONGODB_URI)
+	.connect(con)
 	.then(() => {
 		console.log('DB ok');
 	})
