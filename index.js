@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express from 'express';
 import mongoose from 'mongoose';
 import multer from 'multer';
@@ -26,6 +27,9 @@ mongoose
 const app = express();
 app.use(express.json());
 
+// Убираем проблему с отправкой запросов с фронта
+app.use(cors());
+
 // Работа с загрузкой картинок через multer
 app.use('/upload', express.static('uploads')); // делаем папку с загрузками статической, чтобы запросом можно получать
 
@@ -47,7 +51,7 @@ app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
 });
 
 // Устанавливаем порт для прослушки
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 3000;
 
 // Главная страница
 app.get('/', (req, res) => {
@@ -68,7 +72,7 @@ app.post(
 	UserController.login
 );
 
-// Получение данны о нынешнем пользователе
+// Получение данных о нынешнем пользователе
 app.post('/auth/me', checkAuth, UserController.getMe);
 
 // CRUD - create, read, update, delete
