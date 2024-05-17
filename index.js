@@ -13,9 +13,7 @@ import {
 
 // Подключение к БД
 mongoose
-	.connect(
-		'mongodb+srv://ruslan:jA2tJZzwALoaMLAW@cluster.yvem4p5.mongodb.net/sneakers'
-	)
+	.connect(process.env.MONGODB_URI)
 	.then(() => {
 		console.log('DB ok');
 	})
