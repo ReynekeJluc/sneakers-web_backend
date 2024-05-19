@@ -5,9 +5,14 @@ import mongoose from 'mongoose';
 import multer from 'multer';
 import path from 'path';
 
-import { SneakersController, UserController } from './controller/index.js';
+import {
+	BrandController,
+	SneakersController,
+	UserController,
+} from './controller/index.js';
 import { checkAuth, handleValidationErrors } from './utils/index.js';
 import {
+	brandCreateValidation,
 	loginValidation,
 	postCreateValidation,
 	registerValidation,
@@ -79,6 +84,13 @@ app.post(
 	handleValidationErrors,
 	UserController.login
 );
+
+// Получение брэндов
+app.get('/brand', BrandController.getAllBrand);
+app.get('/brand/:id', BrandController.getOneBrand);
+
+// Добавление брэнда
+app.post('/brand', checkAuth, brandCreateValidation, BrandController.create);
 
 // Получение данных о нынешнем пользователе
 app.post('/auth/me', checkAuth, UserController.getMe);
