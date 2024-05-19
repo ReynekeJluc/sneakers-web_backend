@@ -6,15 +6,13 @@ export const postCreateValidation = [
 			min: 3,
 		})
 		.isString(),
-	body('brand', 'Некорректный брэнд').isNumeric(),
+	body('brand', 'Некорректный брэнд').isString(),
 	body('desc', 'Некорректное описание')
 		.isLength({
 			min: 10,
 		})
 		.isString(),
 	body('price', 'Некорректная цена').isNumeric(),
-	body('sources', 'Некорректные источники (нужен массив)')
-		.optional()
-		.isString(),
+	body('sources', 'Некорректные источники (нужен массив)').optional().isArray(),
 	body('imageUrl', 'Неверная ссылка на картинку').optional().isURL(),
 ];

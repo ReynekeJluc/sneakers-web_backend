@@ -1,8 +1,12 @@
+import BrandSchema from '../models/Brand.js';
 import SneakersModel from '../models/Sneakers.js';
 
 export const getAll = async (req, res) => {
 	try {
-		const records = await SneakersModel.find().populate('user').exec();
+		const records = await SneakersModel.find()
+			.populate('user')
+			.populate('brand')
+			.exec();
 
 		res.json(records);
 	} catch (error) {
@@ -61,9 +65,11 @@ export const remove = async (req, res) => {
 
 export const create = async (req, res) => {
 	try {
+		const brand = await BrandSchema.findOne({ brand: req.body.brand });
+
 		const doc = new SneakersModel({
 			title: req.body.title,
-			brand: req.body.brand,
+			brand: brand,
 			desc: req.body.desc,
 			price: req.body.price,
 			sources: req.body.sources,
@@ -85,6 +91,7 @@ export const create = async (req, res) => {
 export const update = async (req, res) => {
 	try {
 		const sneakersId = req.params.id;
+		const brand = await BrandSchema.findOne({ brand: req.body.brand });
 
 		const updateSneakers = await SneakersModel.updateOne(
 			{
@@ -92,7 +99,7 @@ export const update = async (req, res) => {
 			},
 			{
 				title: req.body.title,
-				brand: req.body.brand,
+				brand: brand,
 				desc: req.body.desc,
 				price: req.body.price,
 				sources: req.body.sources,

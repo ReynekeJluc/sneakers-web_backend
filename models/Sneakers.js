@@ -7,7 +7,8 @@ const SneakersSchema = new mongoose.Schema(
 			required: true,
 		},
 		brand: {
-			type: Number,
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Brand',
 			required: true,
 		},
 		desc: {
