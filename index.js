@@ -1,7 +1,9 @@
 import cors from 'cors';
+import crypto from 'crypto';
 import express from 'express';
 import mongoose from 'mongoose';
 import multer from 'multer';
+import path from 'path';
 
 import { SneakersController, UserController } from './controller/index.js';
 import { checkAuth, handleValidationErrors } from './utils/index.js';
@@ -12,7 +14,9 @@ import {
 } from './validation/index.js';
 
 // Подключение к БД
-const con = process.env.MONGODB_URI;
+const con =
+	process.env.MONGODB_URI ||
+	'mongodb+srv://ruslan:jA2tJZzwALoaMLAW@cluster.yvem4p5.mongodb.net/sneakers';
 
 mongoose
 	.connect(con)
@@ -31,14 +35,18 @@ app.use(express.json());
 app.use(cors());
 
 // Работа с загрузкой картинок через multer
-app.use('/upload', express.static('uploads')); // делаем папку с загрузками статической, чтобы запросом можно получать
+app.use('/upload', express.static('upload')); // делаем папку с загрузками статической, чтобы запросом можно получать
 
+var hash = '';
+var ext = '';
 const storage = multer.diskStorage({
 	destination: (_, __, callback) => {
-		callback(null, 'uploads');
+		callback(null, 'upload');
 	},
 	filename: (_, file, callback) => {
-		callback(null, file.originalname);
+		hash = crypto.createHash('md5').update(Date.now().toString()).digest('hex');
+		ext = path.extname(file.originalname);
+		callback(null, `${hash}${ext}`);
 	},
 });
 
@@ -46,7 +54,7 @@ const upload = multer({ storage });
 
 app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
 	res.json({
-		url: `/upload/${req.file.originalname}`,
+		url: `/upload/${hash}${ext}`,
 	});
 });
 
