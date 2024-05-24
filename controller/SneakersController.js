@@ -1,6 +1,11 @@
 import BrandSchema from '../models/Brand.js';
 import SneakersModel from '../models/Sneakers.js';
 
+import fs from 'fs';
+import path from 'path';
+
+const __dirname = import.meta.dirname;
+
 export const getAll = async (req, res) => {
 	try {
 		const records = await SneakersModel.find()
@@ -59,6 +64,29 @@ export const remove = async (req, res) => {
 		console.log(error.message);
 		res.status(500).json({
 			error: 'Не удалось удалить запись',
+		});
+	}
+};
+
+//! удаление картинки
+export const removeImage = async (req, res) => {
+	try {
+		let imagePath = path.join(__dirname, 'upload', req.params.imageUrl);
+		imagePath = imagePath.replace('controller', '');
+
+		fs.unlink(imagePath, err => {
+			if (err) {
+				console.error('Ошибка при удалении файла:', err);
+				res.status(500).json({ error: 'Не удалось удалить файл' });
+				console.log(imagePath);
+			} else {
+				res.send('Файл успешно удален');
+			}
+		});
+	} catch (error) {
+		console.log(error.message);
+		res.status(500).json({
+			error: 'Не удалось удалить картинку',
 		});
 	}
 };

@@ -14,5 +14,5 @@ export const postCreateValidation = [
 		.isString(),
 	body('price', 'Некорректная цена').isNumeric(),
 	body('sources', 'Некорректные источники (нужен массив)').optional().isArray(),
-	body('imageUrl', 'Неверная ссылка на картинку').optional().isURL(),
+	body('imageUrl', 'Неверная ссылка на картинку').optional(),
 ];

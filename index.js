@@ -62,6 +62,11 @@ app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
 		url: `/upload/${hash}${ext}`,
 	});
 });
+app.delete(
+	'/upload/:imageUrl/delete',
+	checkAuth,
+	SneakersController.removeImage
+);
 
 // Устанавливаем порт для прослушки
 const PORT = process.env.PORT || 3000;
