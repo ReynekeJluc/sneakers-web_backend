@@ -8,12 +8,30 @@ const __dirname = import.meta.dirname;
 
 export const getAll = async (req, res) => {
 	try {
+		const totalRecords = await SneakersModel.countDocuments();
+
+		const { page = 1, pageSize = 3 } = req.query;
+
+		const skip = (page - 1) * pageSize;
+
+		const totalPages = Math.ceil(totalRecords / pageSize);
+
 		const records = await SneakersModel.find()
 			.populate('user')
 			.populate('brand')
+			.skip(skip)
+			.limit(parseInt(pageSize))
 			.exec();
 
-		res.json(records);
+		res.json({
+			pages: {
+				totalRecords,
+				totalPages,
+				currentPage: parseInt(page),
+				pageSize: parseInt(pageSize),
+			},
+			data: records,
+		});
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({
