@@ -1,6 +1,7 @@
 import cors from 'cors';
 import crypto from 'crypto';
 import express from 'express';
+import fs from 'fs';
 import mongoose from 'mongoose';
 import multer from 'multer';
 import path from 'path';
@@ -49,6 +50,9 @@ var hash = '';
 var ext = '';
 const storage = multer.diskStorage({
 	destination: (_, __, callback) => {
+		if (!fs.existsSync('upload')) {
+			fs.mkdirSync('upload');
+		}
 		callback(null, 'upload');
 	},
 	filename: (_, file, callback) => {
