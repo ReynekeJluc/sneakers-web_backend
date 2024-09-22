@@ -23,6 +23,9 @@ const con =
 	process.env.MONGODB_URI ||
 	'mongodb+srv://ruslan:jA2tJZzwALoaMLAW@cluster.yvem4p5.mongodb.net/sneakers';
 
+// Устанавливаем порт для прослушки
+const PORT = process.env.PORT || 3000;
+
 mongoose
 	.connect(con)
 	.then(() => {
@@ -68,9 +71,6 @@ app.delete(
 	SneakersController.removeImage
 );
 
-// Устанавливаем порт для прослушки
-const PORT = process.env.PORT || 3000;
-
 // Главная страница
 app.get('/', (req, res) => {
 	res.send('Hello world');
@@ -91,7 +91,7 @@ app.post(
 );
 
 // Получение брэндов
-app.get('/brand', BrandController.getAllBrand);
+app.get('/brand', BrandController.getPagesBrand);
 app.get('/brand/:id', BrandController.getOneBrand);
 
 // Добавление брэнда
@@ -101,7 +101,9 @@ app.post('/brand', checkAuth, brandCreateValidation, BrandController.create);
 app.post('/auth/me', checkAuth, UserController.getMe);
 
 // CRUD - create, read, update, delete
-app.get('/sneakers', SneakersController.getAll);
+app.get('/sneakers', SneakersController.getPages);
+app.get('/sneakers_all', SneakersController.getAll);
+app.get('/sneakers_admin', SneakersController.getAllforAdmin);
 app.get('/sneakers/:id', SneakersController.getOne);
 app.post(
 	'/sneakers',

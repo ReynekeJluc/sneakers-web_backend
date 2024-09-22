@@ -14,7 +14,7 @@ export const create = async (req, res) => {
 	}
 };
 
-export const getAllBrand = async (req, res) => {
+export const getPagesBrand = async (req, res) => {
 	try {
 		const records = await BrandSchema.find().populate('brand').exec();
 

@@ -1,12 +1,13 @@
+import fs from 'fs';
+import jwt from 'jsonwebtoken';
+import path from 'path';
+
 import BrandSchema from '../models/Brand.js';
 import SneakersModel from '../models/Sneakers.js';
 
-import fs from 'fs';
-import path from 'path';
-
 const __dirname = import.meta.dirname;
 
-export const getAll = async (req, res) => {
+export const getPages = async (req, res) => {
 	try {
 		const totalRecords = await SneakersModel.countDocuments();
 
@@ -30,6 +31,46 @@ export const getAll = async (req, res) => {
 				currentPage: parseInt(page),
 				pageSize: parseInt(pageSize),
 			},
+			data: records,
+		});
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({
+			error: 'Не удалось получить записи',
+		});
+	}
+};
+
+export const getAll = async (req, res) => {
+	try {
+		const records = await SneakersModel.find()
+			.populate('user')
+			.populate('brand')
+			.exec();
+
+		res.json({
+			data: records,
+		});
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({
+			error: 'Не удалось получить записи',
+		});
+	}
+};
+
+export const getAllforAdmin = async (req, res) => {
+	try {
+		const token = req.headers.authorization; // Получаем токен
+		const decoded = jwt.verify(token, 'secret'); // Декодируем токен
+		const userId = decoded._id; // Извлекаем ID пользователя
+
+		const records = await SneakersModel.find({ user: userId })
+			.populate('user')
+			.populate('brand')
+			.exec();
+
+		res.json({
 			data: records,
 		});
 	} catch (error) {
