@@ -14,7 +14,7 @@ export const create = async (req, res) => {
 		res.status(201).json(brand);
 	} catch (error) {
 		console.log(error);
-		res.status(400).send(error.message);
+		res.status(400).send(error);
 	}
 };
 
