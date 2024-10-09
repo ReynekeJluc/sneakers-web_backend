@@ -6,7 +6,7 @@ export const postCreateValidation = [
 			min: 3,
 		})
 		.isString(),
-	body('brand', 'Некорректный брэнд').isString(),
+	body('brand', 'Некорректный брэнд').isString().isIn(["Nike", "Puma", "UnderArmour"]),
 	body('desc', 'Некорректное описание')
 		.isLength({
 			min: 10,
