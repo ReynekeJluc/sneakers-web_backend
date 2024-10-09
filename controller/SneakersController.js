@@ -35,7 +35,7 @@ export const getPages = async (req, res) => {
 		});
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({
+		res.status(400).json({
 			error: 'Не удалось получить записи',
 		});
 	}
@@ -53,7 +53,7 @@ export const getAll = async (req, res) => {
 		});
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({
+		res.status(400).json({
 			error: 'Не удалось получить записи',
 		});
 	}
@@ -75,7 +75,7 @@ export const getAllforAdmin = async (req, res) => {
 		});
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({
+		res.status(400).json({
 			error: 'Не удалось получить записи',
 		});
 	}
@@ -96,7 +96,7 @@ export const getOne = async (req, res) => {
 		res.json(record);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({
+		res.status(400).json({
 			error: 'Не удалось получить запись',
 		});
 	}
@@ -121,7 +121,7 @@ export const remove = async (req, res) => {
 		});
 	} catch (error) {
 		console.log(error.message);
-		res.status(500).json({
+		res.status(400).json({
 			error: 'Не удалось удалить запись',
 		});
 	}
@@ -144,7 +144,7 @@ export const removeImage = async (req, res) => {
 		});
 	} catch (error) {
 		console.log(error.message);
-		res.status(500).json({
+		res.status(400).json({
 			error: 'Не удалось удалить картинку',
 		});
 	}
@@ -169,9 +169,7 @@ export const create = async (req, res) => {
 		res.json(post);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({
-			error: 'Не удалось создать запись',
-		});
+		res.status(400).send(error.message);
 	}
 };
 
@@ -206,7 +204,7 @@ export const update = async (req, res) => {
 		});
 	} catch (error) {
 		console.log(error.message);
-		res.status(500).json({
+		res.status(400).json({
 			error: 'Не удалось обновить запись',
 		});
 	}
