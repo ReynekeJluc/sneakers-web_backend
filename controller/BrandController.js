@@ -2,14 +2,10 @@ import BrandSchema from '../models/Brand.js';
 
 export const create = async (req, res) => {
 	try {
-		const doc = new BrandSchema({
-			brand: req.body.brand,
-			desc: req.body.desc
-		});
+		const brand = await BrandSchema(req.body);
+		await brand.save();
 
-		const post = await doc.save();
-
-		res.status(201).json(post);
+		res.status(201).json(brand);
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({
