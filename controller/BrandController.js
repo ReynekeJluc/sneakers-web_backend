@@ -8,9 +8,7 @@ export const create = async (req, res) => {
 		res.status(201).json(brand);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({
-			error: 'Не удалось добавить брэнд',
-		});
+		res.status(400).send(error.message);
 	}
 };
 
@@ -33,7 +31,7 @@ export const remove = async (req, res) => {
 		});
 	} catch (error) {
 		console.log(error.message);
-		res.status(500).json({
+		res.status(400).json({
 			error: 'Не удалось удалить запись',
 		});
 	}
@@ -46,7 +44,7 @@ export const getPagesBrand = async (req, res) => {
 		res.json(records);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({
+		res.status(400).json({
 			error: 'Не удалось получить брэнды',
 		});
 	}
@@ -67,7 +65,7 @@ export const getOneBrand = async (req, res) => {
 		res.json(record);
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({
+		res.status(400).json({
 			error: 'Не удалось получить брэнд',
 		});
 	}
