@@ -14,6 +14,31 @@ export const create = async (req, res) => {
 	}
 };
 
+export const remove = async (req, res) => {
+	try {
+		const brandId = req.params.id;
+
+		const deletedBrand = await BrandSchema.findOneAndDelete({
+			_id: brandId,
+		});
+
+		if (!deletedBrand) {
+			return res.status(404).json({
+				message: 'Не удалось найти запись',
+			});
+		}
+
+		res.json({
+			success: true,
+		});
+	} catch (error) {
+		console.log(error.message);
+		res.status(500).json({
+			error: 'Не удалось удалить запись',
+		});
+	}
+};
+
 export const getPagesBrand = async (req, res) => {
 	try {
 		const records = await BrandSchema.find().populate('brand').exec();
