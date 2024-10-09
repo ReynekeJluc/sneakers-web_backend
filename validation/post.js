@@ -16,7 +16,8 @@ export const postCreateValidation = [
 		{
 			if (value < 0) return Promise.reject("Price should be positive");
 			else return true;
-		),
+		}
+	),
 	body('sources', 'Некорректные источники (нужен массив)').optional().isArray(),
 	body('imageUrl', 'Неверная ссылка на картинку').optional(),
 ];
