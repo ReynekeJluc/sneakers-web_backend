@@ -5,10 +5,6 @@ const BrandSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	brand_id: {
-		type: String,
-		required: true,
-	},
 	desc: {
 		type: String,
 		required: true,
