@@ -101,6 +101,9 @@ app.get('/brand/:id', BrandController.getOneBrand);
 // Добавление брэнда
 app.post('/brand', checkAuth, brandCreateValidation, BrandController.create);
 
+// Удаление брэнда
+app.delete('/brand/:id', checkAuth, BrandController.remove);
+
 // Получение данных о нынешнем пользователе
 app.post('/auth/me', checkAuth, UserController.getMe);
 
