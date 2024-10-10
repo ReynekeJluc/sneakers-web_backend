@@ -4,6 +4,7 @@ import path from 'path';
 
 import BrandSchema from '../models/Brand.js';
 import SneakersModel from '../models/Sneakers.js';
+import UserSchema from '../models/User.js';
 
 const __dirname = import.meta.dirname;
 
@@ -65,18 +66,32 @@ export const getAllforAdmin = async (req, res) => {
 		const decoded = jwt.verify(token, 'secret'); // Декодируем токен
 		const userId = decoded._id; // Извлекаем ID пользователя
 
-		const records = await SneakersModel.find({ user: userId })
-			.populate('user')
-			.populate('brand')
-			.exec();
+		const user = await UserSchema.findOne({ _id: userId });
 
-		res.json({
-			data: records,
-		});
+		if (user.isAdmin) {
+			const records = await SneakersModel.find()
+				.populate('user')
+				.populate('brand')
+				.exec();
+
+			res.json({
+				data: records,
+			});
+		} else {
+			const records = await SneakersModel.find({ user: userId })
+				.populate('user')
+				.populate('brand')
+				.exec();
+
+			res.json({
+				data: records,
+			});
+		}
 	} catch (error) {
 		console.log(error);
 		res.status(400).json({
 			error: 'Не удалось получить записи',
+			message: error.message,
 		});
 	}
 };

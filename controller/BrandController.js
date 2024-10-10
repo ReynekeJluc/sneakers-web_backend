@@ -10,7 +10,7 @@ export const create = async (req, res) => {
 		const post = await doc.save();
 
 		res.json(post);
-		
+
 		res.status(201).json(brand);
 	} catch (error) {
 		console.log(error);
@@ -21,6 +21,15 @@ export const create = async (req, res) => {
 export const remove = async (req, res) => {
 	try {
 		const brandId = req.params.id;
+
+		const associatedSneakers = await SneakerSchema.find({ brand: brandId });
+
+		if (associatedSneakers.length > 0) {
+			return res.status(400).json({
+				message:
+					'Невозможно удалить бренд, так как существуют связанные кроссовки.',
+			});
+		}
 
 		const deletedBrand = await BrandSchema.findOneAndDelete({
 			_id: brandId,
