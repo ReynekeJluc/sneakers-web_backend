@@ -6,8 +6,8 @@ export const postCreateValidation = [
 			min: 3,
 		})
 		.isString(),
-	body('brand', 'Некорректный брэнд').isString().custom(async (val) => {
-		const brandEx = await Brand.findOne({name: val});
+	body('brand', 'Некорректный брэнд').custom(async (val) => {
+		const brandEx = await Brand.findOne({_id: val});
 
 		if (!brandEx) {
 			throw new Error('Brand not exist');
