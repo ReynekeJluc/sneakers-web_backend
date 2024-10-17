@@ -1,7 +1,7 @@
 import { body } from 'express-validator';
 
 export const brandCreateValidation = [
-	body('brand', 'Некорректный брэнд').isString().isLength({
+	body('brand', 'Некорректный брэнд1').isString().isLength({
 		min: 2,
 	}),,
 	body('desc', 'Некорректное описание')
