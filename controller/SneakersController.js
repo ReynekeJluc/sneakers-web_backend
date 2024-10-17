@@ -167,11 +167,9 @@ export const removeImage = async (req, res) => {
 
 export const create = async (req, res) => {
 	try {
-		const brand = await BrandSchema.findOne({ brand: req.body.brand });
-
 		const doc = new SneakersModel({
 			title: req.body.title,
-			brand: brand,
+			brand: req.body.brand,
 			desc: req.body.desc,
 			price: req.body.price,
 			sources: req.body.sources,
@@ -191,7 +189,6 @@ export const create = async (req, res) => {
 export const update = async (req, res) => {
 	try {
 		const sneakersId = req.params.id;
-		const brand = await BrandSchema.findOne({ brand: req.body.brand });
 
 		const updateSneakers = await SneakersModel.updateOne(
 			{
@@ -199,7 +196,7 @@ export const update = async (req, res) => {
 			},
 			{
 				title: req.body.title,
-				brand: brand,
+				brand: req.body.brand,
 				desc: req.body.desc,
 				price: req.body.price,
 				sources: req.body.sources,
