@@ -6,7 +6,7 @@ export const postCreateValidation = [
 			min: 3,
 		})
 		.isString(),
-	body('brand', 'Некорректный брэнд').isJSON().custom(async (val) => {
+	body('brand', 'Некорректный брэнд').custom(async (val) => {
 		const val_id = val._id;
 		
 		console.log(val_id);
