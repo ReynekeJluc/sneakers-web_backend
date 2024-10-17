@@ -1,4 +1,5 @@
 import BrandSchema from '../models/Brand.js';
+import SneakerSchema from '../models/Sneakers.js';
 
 export const create = async (req, res) => {
 	try {
