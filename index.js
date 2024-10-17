@@ -99,10 +99,25 @@ app.get('/brand', BrandController.getPagesBrand);
 app.get('/brand/:id', BrandController.getOneBrand);
 
 // Добавление брэнда
-app.post('/brand', checkAuth, brandCreateValidation, handleValidationErrors, BrandController.create);
+app.post(
+	'/brand',
+	checkAuth,
+	brandCreateValidation,
+	handleValidationErrors,
+	BrandController.create
+);
 
 // Удаление брэнда
 app.delete('/brand/:id', checkAuth, BrandController.remove);
+
+// обновление
+app.patch(
+	'/brand/:id',
+	checkAuth,
+	brandCreateValidation,
+	handleValidationErrors,
+	BrandController.update
+);
 
 // Получение данных о нынешнем пользователе
 app.post('/auth/me', checkAuth, UserController.getMe);

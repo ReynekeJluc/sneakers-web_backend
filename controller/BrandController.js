@@ -1,5 +1,5 @@
 import BrandSchema from '../models/Brand.js';
-import SneakersSchema  from '../models/Sneakers.js';
+import SneakersSchema from '../models/Sneakers.js';
 
 export const create = async (req, res) => {
 	try {
@@ -10,9 +10,7 @@ export const create = async (req, res) => {
 
 		const post = await doc.save();
 
-		res.json(post);
-
-		res.status(201).json(brand);
+		res.status(201).json(post);
 	} catch (error) {
 		console.log(error);
 		res.status(400).send(error.message);
@@ -23,7 +21,7 @@ export const remove = async (req, res) => {
 	try {
 		const brandId = req.params.id;
 
-		const associatedSneakers = await SneakersSchema .find({ brand: brandId });
+		const associatedSneakers = await SneakersSchema.find({ brand: brandId });
 
 		if (associatedSneakers.length > 0) {
 			return res.status(400).json({
@@ -83,6 +81,49 @@ export const getOneBrand = async (req, res) => {
 		console.log(error);
 		res.status(400).json({
 			error: 'Не удалось получить брэнд',
+		});
+	}
+};
+
+export const update = async (req, res) => {
+	try {
+		const brandId = req.params.id;
+		const brand = req.body.brand;
+
+		const existingBrand = await BrandSchema.findOne({
+			brand,
+			_id: { $ne: brandId },
+		});
+
+		if (existingBrand) {
+			return res.status(400).json({
+				message: 'Бренд с таким названием уже существует',
+			});
+		}
+
+		const updateBrand = await BrandSchema.updateOne(
+			{
+				_id: brandId,
+			},
+			{
+				brand: req.body.brand,
+				desc: req.body.desc,
+			}
+		);
+
+		if (!updateBrand) {
+			return res.status(404).json({
+				message: 'Не удалось найти запись',
+			});
+		}
+
+		res.json({
+			success: true,
+		});
+	} catch (error) {
+		console.log(error.message);
+		res.status(400).json({
+			error: 'Не удалось обновить брэнд',
 		});
 	}
 };
