@@ -12,7 +12,7 @@ export const postCreateValidation = [
 		if (!brandEx) {
 			throw new Error('Brand not exist');
 		}
-	})
+	}),
 	body('desc', 'Некорректное описание')
 		.isLength({
 			min: 10,
