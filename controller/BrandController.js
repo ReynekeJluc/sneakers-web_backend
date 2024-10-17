@@ -1,5 +1,5 @@
 import BrandSchema from '../models/Brand.js';
-import SneakerSchema from '../models/Sneakers.js';
+import SneakersSchema  from '../models/Sneakers.js';
 
 export const create = async (req, res) => {
 	try {
@@ -23,7 +23,7 @@ export const remove = async (req, res) => {
 	try {
 		const brandId = req.params.id;
 
-		const associatedSneakers = await SneakerSchema.find({ brand: brandId });
+		const associatedSneakers = await SneakersSchema .find({ brand: brandId });
 
 		if (associatedSneakers.length > 0) {
 			return res.status(400).json({
