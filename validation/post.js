@@ -6,7 +6,13 @@ export const postCreateValidation = [
 			min: 3,
 		})
 		.isString(),
-	body('brand', 'Некорректный брэнд').isString(), //!
+	body('brand', 'Некорректный брэнд').isString().custom(async (val) => {
+		const brandEx = await Brand.findOne({name: val});
+
+		if (!brandEx) {
+			throw new Error('Brand not exist');
+		}
+	})
 	body('desc', 'Некорректное описание')
 		.isLength({
 			min: 10,
