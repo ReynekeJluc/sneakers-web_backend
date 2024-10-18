@@ -3,6 +3,14 @@ import SneakersSchema from '../models/Sneakers.js';
 
 export const create = async (req, res) => {
 	try {
+		const BrandEx = await BrandSchema.findOne({ brand });
+		if (BrandEx) {
+			return res.status(400).json({
+				message:
+					'Брэнд уже существует',
+			});
+		}
+		
 		const doc = new BrandSchema({
 			brand: req.body.brand,
 			desc: req.body.desc,
