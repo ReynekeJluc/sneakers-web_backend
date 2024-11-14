@@ -89,7 +89,7 @@ export const getOne = async (req, res) => {
 		res.json(record);
 	} catch (error) {
 		console.log(error);
-		res.status(400).json({ error: 'Не удалось получить запись' });
+		res.status(404).json({ error: 'Не удалось получить запись' });
 	}
 };
 
