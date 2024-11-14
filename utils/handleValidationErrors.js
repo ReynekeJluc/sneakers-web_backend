@@ -5,7 +5,7 @@ export default (req, res, next) => {
 
 	if (!errors.isEmpty()) {
 		console.log(errors.array()[0].msg);
-		return res.status(400).json(errors.array());
+		return res.status(422).json(errors.array());
 	}
 
 	next();

@@ -46,41 +46,49 @@ app.use(cors());
 // Работа с загрузкой картинок через multer
 app.use('/upload', express.static('upload')); // делаем папку с загрузками статической, чтобы запросом можно получать
 
+// Инициализация переменных для хранения хеша и расширения файла
 var hash = '';
 var ext = '';
+
+// Конфигурация хранения Multer для загрузки файлов
 const storage = multer.diskStorage({
 	destination: (_, __, callback) => {
+		// Проверка существования папки 'upload'; создание, если её нет
 		if (!fs.existsSync('upload')) {
 			fs.mkdirSync('upload');
 		}
+		// Установка папки назначения для загруженных файлов
 		callback(null, 'upload');
 	},
 	filename: (_, file, callback) => {
-		hash = crypto.createHash('md5').update(Date.now().toString()).digest('hex');
-		ext = path.extname(file.originalname);
-		callback(null, `${hash}${ext}`);
+		hash = crypto.createHash('md5').update(Date.now().toString()).digest('hex'); // Генерация уникального имени файла с помощью хеша и текущего времени
+		ext = path.extname(file.originalname); // Извлечение расширения из оригинального имени файла
+		callback(null, `${hash}${ext}`); // назначение нового имени файла
 	},
 });
 
 const upload = multer({ storage });
 
+// Главная страница (тестовый эндпоинт)
+app.get('/', (req, res) => {
+	res.send('Hello world');
+});
+
+// Маршрут для загрузки картинки
 app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
 	res.json({
 		url: `/upload/${hash}${ext}`,
 	});
 });
+
+// Маршрут для удаления картинки
 app.delete(
 	'/upload/:imageUrl/delete',
 	checkAuth,
 	SneakersController.removeImage
 );
 
-// Главная страница
-app.get('/', (req, res) => {
-	res.send('Hello world');
-});
-
-// Регистрация и авторизация
+// Маршруты для регистрации и авторизации
 app.post(
 	'/auth/register',
 	registerValidation,
@@ -94,11 +102,11 @@ app.post(
 	UserController.login
 );
 
-// Получение брэндов
+// Маршруты для получения данных о брендах
 app.get('/brand', BrandController.getPagesBrand);
 app.get('/brand/:id', BrandController.getOneBrand);
 
-// Добавление брэнда
+// Маршрут для создания нового бренда
 app.post(
 	'/brand',
 	checkAuth,
@@ -107,10 +115,10 @@ app.post(
 	BrandController.create
 );
 
-// Удаление брэнда
+// Маршрут для удаления бренда
 app.delete('/brand/:id', checkAuth, BrandController.remove);
 
-// обновление
+// Маршрут для обновления бренда
 app.patch(
 	'/brand/:id',
 	checkAuth,
@@ -119,31 +127,30 @@ app.patch(
 	BrandController.update
 );
 
-// Получение данных о нынешнем пользователе
+// Маршрут для получения данных о текущем пользователе
 app.post('/auth/me', checkAuth, UserController.getMe);
 
-// CRUD - create, read, update, delete
-app.get('/sneakers', SneakersController.getPages);
-app.get('/sneakers_all', SneakersController.getAll);
-app.get('/sneakers_admin', SneakersController.getAllforAdmin);
-app.get('/sneakers/:id', SneakersController.getOne);
+app.get('/sneakers', SneakersController.getPages); // Получение списка товаров (с пагинацией)
+app.get('/sneakers_all', SneakersController.getAll); // Получение полного списка товаров
+app.get('/sneakers_admin', SneakersController.getAllForAdmin); // Список товаров для администратора
+app.get('/sneakers/:id', SneakersController.getOne); // Получение одного товара
 app.post(
 	'/sneakers',
 	checkAuth,
 	postCreateValidation,
 	handleValidationErrors,
 	SneakersController.create
-);
-app.delete('/sneakers/:id', checkAuth, SneakersController.remove);
+); // Создание товара
+app.delete('/sneakers/:id', checkAuth, SneakersController.remove); // Удаление товара
 app.patch(
 	'/sneakers/:id',
 	checkAuth,
 	postCreateValidation,
 	handleValidationErrors,
 	SneakersController.update
-);
+); // Обновление товара
 
-// Запуск локалки
+// Запуск сервера на локальном хосте
 app.listen(PORT, err => {
 	if (err) {
 		return console.log(err);

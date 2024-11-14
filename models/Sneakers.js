@@ -7,7 +7,7 @@ const SneakersSchema = new mongoose.Schema(
 			required: true,
 		},
 		brand: {
-			type: mongoose.Schema.Types.ObjectId,
+			type: mongoose.Schema.Types.ObjectId, //  сохраняем объект типа
 			ref: 'Brand',
 			required: true,
 		},
